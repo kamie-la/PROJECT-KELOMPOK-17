@@ -1,1 +1,8 @@
+.vscode/
+output/
+
 *.exe
+*.out
+synthesizer
+audio_gen
+audio_synthesizer
