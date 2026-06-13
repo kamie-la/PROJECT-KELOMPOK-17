@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <cstdint>
+#include <cstdlib>
 
 #if defined(_WIN32) || defined(_WIN64)
     #include <conio.h>
@@ -132,6 +133,32 @@ int main() {
                 cetakTengah("MENU UTAMA PEMBELI");
                 cout << "============================================\n";
                 cout << "\ncihuy\n";
+                //pt 1
+                //pt 2
+                //pt 3
+                //pt 4
+                //
+                // cout << "1. undi x1";
+                // cout << "2. undi x5";
+                // int ttlbelanja, angka;
+                // int poin = 0;
+                // poin += ttlbelanja / 10000;      //belanja 10k = 1 poin
+
+                // srand(time(0));
+                // int angka = rand() % 100 + 1;
+
+                // if(angka == 1){ //1%
+                //     // SSR = eeeeeeeeeeeeeeeeeeee hadiah premiumnya, menu yg paling mahal ntar di toko apa, bis yg itu
+                // }
+                // else if(angka <= 10){   //10%
+                //     // SR = hadiah spesial, cookie??,
+                // }
+                // else{
+                //     // R = kopiko aj 🗿
+                // }
+                // // yg SR dst gk bisa tak isi klo bagian admin yg ngatur undian minggu/hari/bulan itu blm ad
+                // int angka = rand() % 100 + 1;
+                
                 cout << "\nTekan tombol apa saja untuk kembali...";
                 ambilInput();
             } 
@@ -144,5 +171,6 @@ int main() {
             }
         }
     }
+    //
     return 0;
 }
