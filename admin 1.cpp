@@ -3,14 +3,14 @@
 #include <string>
 using namespace std;
 
-struct Menu {
+struct menu {
     int id;
     string nama;
     double harga;
     int stok;
 };
 
-void tambahMenuBaru(Menu arr[], int *jumlah, int kapasitas) {
+void tambahmenubaru(menu arr[], int *jumlah, int kapasitas) {
     if (*jumlah >= kapasitas) {
         cout << "\n[!] Array penuh! Tidak bisa menambah menu baru.\n";
         return;
@@ -36,7 +36,7 @@ void tambahMenuBaru(Menu arr[], int *jumlah, int kapasitas) {
     cout << "\n[?] Menu berhasil ditambahkan!\n";
 }
 
-void lihatSemuaMenu(Menu arr[], int jumlah) {
+void lihatsemuamenu(menu arr[], int jumlah) {
     cout << "\n====== DAFTAR SEMUA MENU KAFE ======\n";
 
     if (jumlah == 0) {
@@ -64,4 +64,43 @@ void lihatSemuaMenu(Menu arr[], int jumlah) {
 
     cout << string(54, '-') << "\n";
     cout << "Total menu: " << jumlah << " item\n";
+}
+
+
+void menuadmin(menu arr[], int *jumlah, int kapasitas) {
+    int pilihan;
+
+    do {
+        cout << "\n=============================\n";
+        cout << "      MENU ADMIN - KAFE      \n";
+        cout << "=============================\n";
+        cout << "1. Tambah Menu Baru\n";
+        cout << "2. Lihat Semua Menu\n";
+        cout << "0. Kembali ke Menu Utama\n";
+        cout << "-----------------------------\n";
+        cout << "Pilihan: ";
+        cin >> pilihan;
+
+        switch (pilihan) {
+            case 1:
+                tambahmenubaru(arr, jumlah, kapasitas);
+                break;
+            case 2:
+                lihatsemuamenu(arr, *jumlah);
+                break;
+            case 0:
+                cout << "[?] Kembali ke menu utama...\n";
+                break;
+            default:
+                cout << "[!] Pilihan tidak valid!\n";
+        }
+    } while (pilihan != 0);
+}
+
+int main() {
+    const int max = 100;
+    menu daftarmenu[max];
+    int jumlahmenu = 0;
+    menuadmin(daftarmenu, &jumlahmenu, max);
+    return 0;
 }
