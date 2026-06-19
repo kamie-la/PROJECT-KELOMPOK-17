@@ -1,7 +1,7 @@
-#include <iostream>
-#include <iomanip>
-#include <string>
-using namespace std;
+//#include <iostream>
+//#include <iomanip>
+//#include <string>
+//using namespace std;
 
 
 void tambahmenubaru(Barang arr[], int *jumlah, int kapasitas) {
