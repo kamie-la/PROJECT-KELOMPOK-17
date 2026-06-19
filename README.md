@@ -52,7 +52,7 @@ Untuk mengompilasi dan menjalankan program ini, pastikan perangkat Anda telah te
 2. Jalankan perintah kompilasi dengan merujuk pada berkas utama `main.cpp`:
 ```bash
 g++ main.cpp -o smart_cafe
-
+```
 3. Jalankan file biner yang telah berhasil terbentuk:
-
+```bash
 ./smart_cafe
