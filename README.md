@@ -56,3 +56,5 @@ g++ main.cpp -o smart_cafe
 3. Jalankan file biner yang telah berhasil terbentuk:
 ```bash
 ./smart_cafe
+```
+moga dapet A aminnnnnnn
