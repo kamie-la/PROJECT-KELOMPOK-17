@@ -3,14 +3,8 @@
 #include <string>
 using namespace std;
 
-struct menu {
-    int id;
-    string nama;
-    double harga;
-    int stok;
-};
 
-void tambahmenubaru(menu arr[], int *jumlah, int kapasitas) {
+void tambahmenubaru(Barang arr[], int *jumlah, int kapasitas) {
     if (*jumlah >= kapasitas) {
         cout << "\n[!] Array penuh! Tidak bisa menambah menu baru.\n";
         return;
@@ -33,10 +27,10 @@ void tambahmenubaru(menu arr[], int *jumlah, int kapasitas) {
 
     (*jumlah)++;
 
-    cout << "\n[?] Menu berhasil ditambahkan!\n";
+    cout << "\n[✔] Menu berhasil ditambahkan!\n";
 }
 
-void lihatsemuamenu(menu arr[], int jumlah) {
+void lihatsemuamenu(Barang arr[], int jumlah) {
     cout << "\n====== DAFTAR SEMUA MENU KAFE ======\n";
 
     if (jumlah == 0) {
@@ -67,13 +61,13 @@ void lihatsemuamenu(menu arr[], int jumlah) {
 }
 
 
-void menuadmin(menu arr[], int *jumlah, int kapasitas) {
+void menuadmin(Barang arr[], int *jumlah, int kapasitas) {
     int pilihan;
 
     do {
-        cout << "\n=============================\n";
-        cout << "      MENU ADMIN - KAFE      \n";
-        cout << "=============================\n";
+        cout << "\n==================================\n";
+        cout << "      MENU ADMIN - SMART KAFE      \n";
+        cout << "==================================\n";
         cout << "1. Tambah Menu Baru\n";
         cout << "2. Lihat Semua Menu\n";
         cout << "0. Kembali ke Menu Utama\n";
@@ -89,18 +83,10 @@ void menuadmin(menu arr[], int *jumlah, int kapasitas) {
                 lihatsemuamenu(arr, *jumlah);
                 break;
             case 0:
-                cout << "[?] Kembali ke menu utama...\n";
+                cout << "[✓] Kembali ke menu utama...\n";
                 break;
             default:
                 cout << "[!] Pilihan tidak valid!\n";
         }
     } while (pilihan != 0);
-}
-
-int main() {
-    const int max = 100;
-    menu daftarmenu[max];
-    int jumlahmenu = 0;
-    menuadmin(daftarmenu, &jumlahmenu, max);
-    return 0;
 }
