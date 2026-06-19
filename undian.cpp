@@ -3,17 +3,39 @@
 #include <ctime>
 using namespace std;
 
-struct HadiahDapat {
+// === MODUL 5: STRUCT ===
+struct Hadiah{
     string namaHadiah;
     string rarity;
 };
 
+// Data Dummy (Global Array of Struct)
+Hadiah hadiahR[50] = {{"Voucher Diskon 5%", "R"}, {"Permen", "R"}, {"Stiker Toko", "R"}};
+Hadiah hadiahSR[50] = {{"Tumbler", "SR"}, {"Kopi Ireng", "SR"}};
+Hadiah hadiahSSR[50] = {{"Earphone", "SSR"}};
 
-void menuGacha(int* poinUser, HadiahDapat tas[], int* isiTas){
+int stokR = 3;   // Saat ini baru ada 3 barang R
+int stokSR = 2;  // Saat ini baru ada 2 barang SR
+int stokSSR = 1; // Saat ini baru ada 1 barang SSR
+
+void lihatInventori(Hadiah tas[], int jumlah) {
+    cout << "\n===== INVENTORI =====\n";
+
+    if(jumlah == 0) {
+        cout << "Belum ada hadiah.\n";
+        return;
+    }
+
+    for(int i = 0; i < jumlah; i++) {
+        cout << i + 1 << ". " << tas[i].namaHadiah << " (" << tas[i].rarity << ")" << endl;
+    }
+}
+
+void menuGacha(int* poinUser, Hadiah tas[], int* isiTas){
     int pilihanMenu;
-    int jumlahRoll = 0;
+    int jumlahUndi = 0;     
 
-    cout << "\n--- MENU UNDIAN ---" << endl;
+    cout << "\n==== MENU UNDIAN ====" << endl;
     cout << "Poin Anda: " << *poinUser << endl;
     cout << "1. Undi x1 (1 Poin)" << endl;
     cout << "2. Undi x5 (5 Poin)" << endl;
@@ -21,69 +43,84 @@ void menuGacha(int* poinUser, HadiahDapat tas[], int* isiTas){
     cin >> pilihanMenu;
 
     if (pilihanMenu == 1){
-        jumlahRoll = 1;
+        jumlahUndi = 1;
     } else if (pilihanMenu == 2){
-        jumlahRoll = 5;
+        jumlahUndi = 5;
     } else {
         cout << "Pilihan salah!" << endl;
         return;
     }
 
-    if (*poinUser < jumlahRoll){
-        cout << "Poin kurang! Belanja dulu sana 🗿" << endl;
+    // Validasi poin
+    if (*poinUser < jumlahUndi){
+        cout << "Poin tidak cukup!" << endl;
         return;
     }
 
-    *poinUser -= jumlahRoll;
+    // Potong poin
+    *poinUser -= jumlahUndi;
 
     cout << "\n>> MENGUNDI HADIAH..." << endl;
 
-    for (int i = 1; i <= jumlahRoll; i++) {
-        
-        int angka = (rand() % 100) + 1; 
-        if (angka == 1) { 
-            // 1% Peluang (Angka 1)
-            cout << "Roll " << i << ": [SSR] Eeeeeeeeeee dapet Item Premium Toko!" << endl;
-            
-            // Simpan ke tas (Data Dummy sementara nunggu Admin)
-            tas[*isiTas].namaHadiah = "Item Premium Toko";
-            tas[*isiTas].rarity = "SSR";
-            (*isiTas)++;
-            
-        } 
-        else if (angka <= 10) { 
-            // 9% Peluang (Angka 2 sampai 10)
-            cout << "Roll " << i << ": [SR] Mantap dapet Cookie Spesial!" << endl;
-            
-            tas[*isiTas].namaHadiah = "Cookie Spesial";
-            tas[*isiTas].rarity = "SR";
-            (*isiTas)++;
-            
-        } 
-        else { 
-            // 90% Peluang (Angka 11 sampai 100)
-            cout << "Roll " << i << ": [R] Kopiko aj 🗿" << endl;
-            
-            tas[*isiTas].namaHadiah = "Kopiko";
-            tas[*isiTas].rarity = "R";
-            (*isiTas)++;
+    bool dapatSRatauSSR = false;
+
+    for (int i = 1; i <= jumlahUndi; i++) {
+        string rarity;
+        Hadiah hadiahTerpilih; 
+
+        if (jumlahUndi == 5 && i == 5 && !dapatSRatauSSR){
+            rarity = "SR";
+        } else {
+            int angka = (rand() % 100) + 1; 
+            if (angka == 1) { 
+                rarity = "SSR";
+                dapatSRatauSSR = true;
+            } else if (angka <= 10) { 
+                rarity = "SR";
+                dapatSRatauSSR = true;
+            } else { 
+                rarity = "R";
+            }
         }
+
+        if(rarity == "R") {
+            // Nggak usah pakai sizeof lagi, langsung pakai variabel counter stokR
+            int pilih = rand() % stokR;
+            hadiahTerpilih = hadiahR[pilih];
+        } 
+        else if(rarity == "SR") {
+            int pilih = rand() % stokSR;
+            hadiahTerpilih = hadiahSR[pilih];
+            dapatSRatauSSR = true; 
+        } 
+        else {
+            int pilih = rand() % stokSSR;
+            hadiahTerpilih = hadiahSSR[pilih];
+            dapatSRatauSSR = true;
+        }
+
+        cout << "Undian " << i << " : " << hadiahTerpilih.namaHadiah << " (" << hadiahTerpilih.rarity << ")" << endl;
+        
+        tas[*isiTas] = hadiahTerpilih; // Masukkan barang ke array
+        (*isiTas)++;                   
     }
+
+    cout << "\nSisa poin: " << *poinUser << endl;
 }
 
 int main() {
-    srand(time(0)); // Taruh di main() cukup 1 kali
+    srand(time(0)); 
 
-    // Simulasi user dapet poin dari total belanja
+    // Simulasi state pembeli
     int totalBelanja = 50000;
     int poin = totalBelanja / 10000; // Dapet 5 Poin
     
-    // Tas user (Array of Struct)
-    HadiahDapat inventori[100];
+    Hadiah inventori[100];
     int jumlahDiTas = 0;
 
-    // Panggil fungsinya
+    // Testing panggil fungsi berulang kali
     menuGacha(&poin, inventori, &jumlahDiTas);
+    lihatInventori(inventori, jumlahDiTas);
 
     return 0;
 }
