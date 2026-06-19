@@ -84,7 +84,7 @@ void menuGacha(int* poinUser, Hadiah tas[], int* isiTas){
         }
 
         if(rarity == "R") {
-            // Nggak usah pakai sizeof lagi, langsung pakai variabel counter stokR
+            
             int pilih = rand() % stokR;
             hadiahTerpilih = hadiahR[pilih];
         } 
