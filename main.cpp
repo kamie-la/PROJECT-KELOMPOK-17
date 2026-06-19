@@ -29,8 +29,10 @@ int totalPoin = 0;
 int transaksi[100];
 int jumlahTransaksi = 0;
 //    PANGGIL FILE MODUL KERJAAN ANGGOTA
-#include "admin 1.cpp" //Widya
-
+#include "poin.cpp"             // Modul Loyalty & History (Krisna)
+#include "AdminBagian2cpp.cpp"  // Modul Admin Bagian 2 (Hari)
+#include "admin 1.cpp"          // Modul Admin Bagian 1 (Widya)
+#include "customerTransaction.cpp" // Modul Transaksi Pembeli (Kamila)
 void cetakTengah(string teks) {
     const int LEBAR_TOTAL = 44;
     int panjang_teks = teks.length();
@@ -74,10 +76,11 @@ int main() {
                 menuadmin(daftar_menu, &jumlah_barang, MAKS_DATA);
                 break;
             case 2:
+                cls();
                 cout << "\n============================================\n";
                 cetakTengah("MENU UTAMA PEMBELI");
                 cout << "============================================\n";
-                cout << "[!] Fitur pembeli sedang disiapkan oleh Kamila.\n";
+                beliBarang(daftar_menu, jumlah_barang);
                 break;
             case 0:
                 cout << "\n============================================\n";

@@ -1,9 +1,5 @@
-#include <iostream>
-using namespace std;
-
-int totalPoin=0;
-int transaksi [100];
-int jumlahTransaksi=0;
+// #include <iostream>
+// using namespace std;
 
 void prosesTransaksi(int totalHarga){
     int dapatPoin = totalHarga / 10000;
@@ -24,7 +20,6 @@ void prosesTransaksi(int totalHarga){
     cout << "Poin Didapat  : " << dapatPoin << " poin" << endl;
     cout << "Total Poin    : " << totalPoin << " poin" << endl;
     cout << "----------------------------------------------\n" << endl;
-    
 }
 
 void lihatPoin() {
@@ -55,19 +50,19 @@ void riwayatTransaksi() {
     cout << "=====================================================\n" << endl;
 }
 
-int main () {
-    //TES FUNCTION TRANSAKSI
-    int belanja;
-    cout << "Masukkan total belanja: Rp. "; cin >> belanja;
-    prosesTransaksi(belanja);
-    cout << endl;
+// int main () {
+//     //TES FUNCTION TRANSAKSI
+//     int belanja;
+//     cout << "Masukkan total belanja: Rp. "; cin >> belanja;
+//     prosesTransaksi(belanja);
+//     cout << endl;
 
-    //TES FUNCTION LIHAT POIN
-    lihatPoin();
-    cout << endl;
+//     //TES FUNCTION LIHAT POIN
+//     lihatPoin();
+//     cout << endl;
 
-    //TES FUNCTION RIWAYAT TRANSAKSI
-    cout << endl;
-    riwayatTransaksi();
-    return 0;
-}
+//     //TES FUNCTION RIWAYAT TRANSAKSI
+//     cout << endl;
+//     riwayatTransaksi();
+//     return 0;
+// }

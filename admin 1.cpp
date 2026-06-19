@@ -12,9 +12,17 @@ void tambahmenubaru(Barang arr[], int *jumlah, int kapasitas) {
     }
 
     cout << "\n====== TAMBAH MENU BARU ======\n";
-
-    cout << "Masukkan ID Menu   : ";
-    cin >> arr[*jumlah].id;
+    string idInput;
+    do {
+        cout << "Masukkan ID Menu   : ";
+        cin >> idInput;
+        
+        if (idInput == "0") {
+            cout << "[!] Error: ID \"0\" tidak boleh digunakan \n\n";
+        }
+    } while (idInput == "0");
+    
+    arr[*jumlah].id = idInput;
     cin.ignore();
 
     cout << "Masukkan Nama Menu : ";
@@ -74,6 +82,8 @@ void menuadmin(Barang arr[], int *jumlah, int kapasitas) {
         cout << "==================================\n";
         cout << "1. Tambah Menu Baru\n";
         cout << "2. Lihat Semua Menu\n";
+        cout << "3. Edit Data Barang\n";
+        cout << "4. Hapus Data Barang\n";
         cout << "0. Kembali ke Menu Utama\n";
         cout << "-----------------------------\n";
         cout << "Pilihan: ";
@@ -85,6 +95,12 @@ void menuadmin(Barang arr[], int *jumlah, int kapasitas) {
                 break;
             case 2:
                 lihatsemuamenu(arr, *jumlah);
+                break;
+            case 3:
+                editBarang(daftar_menu, jumlah_barang);
+                break;
+            case 4:
+                hapusBarang(daftar_menu, jumlah_barang);
                 break;
             case 0:
                 cout << "[✓] Kembali ke menu utama...\n";
