@@ -84,6 +84,7 @@ void menuadmin(Barang arr[], int *jumlah, int kapasitas) {
         cout << "2. Lihat Semua Menu\n";
         cout << "3. Edit Data Barang\n";
         cout << "4. Hapus Data Barang\n";
+        cout << "5. Lihat Grafik\n";
         cout << "0. Kembali ke Menu Utama\n";
         cout << "-----------------------------\n";
         cout << "Pilihan: ";
@@ -101,6 +102,10 @@ void menuadmin(Barang arr[], int *jumlah, int kapasitas) {
                 break;
             case 4:
                 hapusBarang(daftar_menu, jumlah_barang);
+                break;
+            case 5:
+                grafik_stok(arr, *jumlah);
+                pause();
                 break;
             case 0:
                 cout << "[✓] Kembali ke menu utama...\n";

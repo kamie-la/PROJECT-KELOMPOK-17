@@ -33,26 +33,11 @@ int jumlahTransaksi = 0;
 #include "AdminBagian2cpp.cpp"  // Modul Admin Bagian 2 (Hari)
 #include "admin 1.cpp"          // Modul Admin Bagian 1 (Widya)
 #include "customerTransaction.cpp" // Modul Transaksi Pembeli (Kamila)
-void cetakTengah(string teks) {
-    const int LEBAR_TOTAL = 44;
-    int panjang_teks = teks.length();
-    
-    if (panjang_teks >= LEBAR_TOTAL) {
-        cout << teks << endl;
-        return;
-    }
-
-    int sisa_spasi = LEBAR_TOTAL - panjang_teks;
-    int spasi_kiri = sisa_spasi / 2;
-    
-    for (int i = 0; i < spasi_kiri; i++) {
-        cout << " ";
-    }
-
-    cout << teks << endl;
-}
 
 int main() {
+    #if defined(_WIN32) || defined(_WIN64)
+        system("chcp 65001 > nul");
+    #endif
     daftar_menu[0] = {"K01", "Kopi Ireng", 10000, 20};
     daftar_menu[1] = {"R01", "Es teh hangat", 15000, 15};
     jumlah_barang = 2;

@@ -67,6 +67,8 @@ void beliBarang(Barang arr[], int jumlah) {
              << itemDipilih->stok << "\n";
     
         prosesTransaksi((int)totalHarga);
-       // return 0;
+        int kalkulasi_poin = (int)totalHarga / 10000;
+        cetak_invoice_digital(itemDipilih->nama, itemDipilih->harga, jumlahBeli, kalkulasi_poin);
+        pause();
     }
 }

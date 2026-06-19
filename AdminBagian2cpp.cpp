@@ -61,7 +61,9 @@ void hapusBarang(Barang daftarBarang[], int &jumlahBarang) {
 
         cout << "\nID Barang ditemukan!\n";
         cout << "Barang berhasil dihapus dari daftar.\n";
+        pause();
     } else {
         cout << "\nID Barang tidak ditemukan!\n";
+        pause();
     }
 }
