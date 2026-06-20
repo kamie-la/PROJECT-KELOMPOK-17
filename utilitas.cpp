@@ -15,20 +15,15 @@ void cls() {
     cout << "\033[2J\033[H";
 }
 
-void pause() {
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    cout << "\nTekan ENTER untuk melanjutkan...";
-    cin.get();
-}
 void cetakTengah(string teks) {
-    const int LEBAR_TOTAL = 44;
+    const int LEBAR_TOTAL = 122;
     int panjang_teks = teks.length();
     
     if (panjang_teks >= LEBAR_TOTAL) {
         cout << teks << endl;
         return;
     }
-
+    
     int sisa_spasi = LEBAR_TOTAL - panjang_teks;
     int spasi_kiri = sisa_spasi / 2;
     
@@ -37,17 +32,53 @@ void cetakTengah(string teks) {
     }
     cout << teks << endl;
 }
+void cetak_opsi_tengah(string teks_menu) {
+    int lebar_terminal = 112;
+    int lebar_konten = 40;
+    int s = (lebar_terminal - lebar_konten) / 2;
+    string pad(s > 0 ? s : 0, ' ');
+    cout << pad << teks_menu << "\n";
+}
+void cetak_input_tengah(string teks_menu) {
+    int lebar_terminal = 112;
+    int lebar_konten = 40;
+    int s = (lebar_terminal - lebar_konten) / 2;
+    string pad(s > 0 ? s : 0, ' ');
+    cout << pad << teks_menu;
+}
+void pause() {
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cetak_input_tengah("\nTekan ENTER untuk melanjutkan...");
+    cin.get();
+}
+void cetak_banner() {
+    int lebar_terminal = 128;
+    int lebar_ascii = 66;
+    int s = (lebar_terminal - lebar_ascii) / 2;
+    string pad(s > 0 ? s : 0, ' ');
+    cout << BOLD << CYAN;
+    cout << pad << "  ____  __  __    _    ____ _____    ____    _     _____ _____ \n";
+    cout << pad << " / ___||  \\/  |  / \\  |  _ \\_   _|  / ___|  / \\   |  ___| ____|\n";
+    cout << pad << " \\___ \\| |\\/| | / _ \\ | |_) || |   | |     / _ \\  | |_  |  _|  \n";
+    cout << pad << "  ___) | |  | |/ ___ \\|  _ < | |   | |___ / ___ \\ |  _| | |___ \n";
+    cout << pad << " |____/|_|  |_/_/   \\_\\_| \\_\\|_|    \\____/_/   \\_\\|_|   |_____|\n";
+    cetakTengah("===================================================================");
+    cout << RESET;
+}
 void grafik_stok(Barang arr[], int jumlah) {
     cls();
-    cout << "=====================================================\n";
+    cetak_banner();
+    cetakTengah("=====================================================");
     cetakTengah("MONITORING GRAFIK STOK KAFE (LIVE)");
-    cout << "=====================================================\n\n";
+    cetakTengah("=====================================================");
+    cout << "\n";
 
     if (jumlah == 0) {
-        cout << "[!] Belum ada data barang untuk dibuatkan grafik.\n";
+        cetak_opsi_tengah("[!] Belum ada data barang untuk dibuatkan grafik.");
         return;
     }
     for (int i = 0; i < jumlah; i++) {
+        // Bagian visualisasi bar di bawah dicetak lurus untuk menjaga keutuhan grafik horizontal
         cout << left << setw(15) << arr[i].nama << " : [";
         
         int panjangBatang = arr[i].stok / 2;
@@ -55,7 +86,7 @@ void grafik_stok(Barang arr[], int jumlah) {
         if (arr[i].stok > 0 && panjangBatang == 0) panjangBatang = 1;
 
         for (int j = 0; j < panjangBatang; j++) {
-            cout <<HIJAU<< "█"<<RESET;
+            cout << HIJAU << "█" << RESET;
         }
 
         int sisaSpasi = 25 - panjangBatang;
@@ -64,17 +95,18 @@ void grafik_stok(Barang arr[], int jumlah) {
         }
         cout << "] " << arr[i].stok << " item";
         if (arr[i].stok <= 5) {
-            cout <<MERAH<< "  <-- [KRITIS!]"<<RESET;
+            cout << MERAH << "  <-- [KRITIS!]" << RESET;
         }
         cout << "\n";
     }
     cout << "\n-----------------------------------------------------\n";
-    cout << "Keterangan: Satuan skala batang (1 blok '"<<HIJAU "█"<<RESET"' = 2 item stok)\n";
+    cetak_input_tengah("Keterangan: Satuan skala batang (1 blok '");
+    cout << HIJAU "█" << RESET << "' = 2 item stok)\n";
 }
 
 void cetak_invoice_digital(string nama_barang, int harga_satuan, int jumlah_beli, int total_poin_didapat) {
     cls();
-    
+    cetak_banner();
     time_t waktu_sekarang = time(0);
     tm *waktu_lokal = localtime(&waktu_sekarang);
     
@@ -89,6 +121,7 @@ void cetak_invoice_digital(string nama_barang, int harga_satuan, int jumlah_beli
 
     cout << "\a" << KUNING << "*klontoooong*\n" << RESET; 
     
+    // Format cetak tabel struk dipertahankan agar baris lurus ke bawah secara simetris
     cout << BOLD << CYAN << "=====================================================\n" << RESET;
     cetakTengah("SMART CAFE - NOTA PEMBAYARAN DIGITAL");
     cout << BOLD << CYAN << "=====================================================\n" << RESET;
@@ -125,4 +158,39 @@ void cetak_invoice_digital(string nama_barang, int harga_satuan, int jumlah_beli
     cout << "=====================================================\n";
     cetakTengah("Terima kasih atas kunjungan Anda!");
     cout << BOLD << CYAN << "=====================================================\n" << RESET;
+}
+void simpan_stok_ke_file(Barang daftar[], int jumlah) {
+    ofstream file("stok_barang.txt");
+    if (file.is_open()) {
+        for (int i = 0; i < jumlah; i++) {
+            file << daftar[i].id << ","
+                 << daftar[i].nama << ","
+                 << daftar[i].harga << ","
+                 << daftar[i].stok << ","
+                 << daftar[i].penambah << "\n";
+        }
+        file.close();
+    }
+}
+
+void muat_stok_dari_file(Barang daftar[], int &jumlah) {
+    ifstream file("stok_barang.txt");
+    if (!file.is_open()) {
+        return; 
+    }
+    
+    jumlah = 0;
+    string harga_str, stok_str;
+    
+    while (getline(file, daftar[jumlah].id, ',') &&
+           getline(file, daftar[jumlah].nama, ',') &&
+           getline(file, harga_str, ',') &&
+           getline(file, stok_str, ',') &&
+           getline(file, daftar[jumlah].penambah)) {
+        
+        daftar[jumlah].harga = stoi(harga_str);
+        daftar[jumlah].stok = stoi(stok_str);
+        jumlah++;
+    }
+    file.close();
 }

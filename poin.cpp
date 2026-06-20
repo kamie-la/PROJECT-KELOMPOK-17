@@ -10,44 +10,59 @@ void prosesTransaksi(int totalHarga){
         jumlahTransaksi++;
     } 
     else {
-        cout << "[LIMIT] Batas Transaksi Harian Telah Penuh!" << endl;
+        cetak_opsi_tengah("[LIMIT] Batas Transaksi Harian Telah Penuh!");
     }
 
-    cout << "\n============================================\n";
-    cout << "              TRANSAKSI SUKSES \n";
-    cout << "============================================\n";
-    cout << "Total Belanja : Rp " << totalHarga << endl;
-    cout << "Poin Didapat  : " << dapatPoin << " poin" << endl;
-    cout << "Total Poin    : " << totalPoin << " poin" << endl;
-    cout << "----------------------------------------------\n" << endl;
+    cetakTengah("============================================");
+    cetakTengah("TRANSAKSI SUKSES");
+    cetakTengah("============================================");
+    
+    cetak_input_tengah("Total Belanja : Rp ");
+    cout << totalHarga << "\n";
+    
+    cetak_input_tengah("Poin Didapat  : ");
+    cout << dapatPoin << " poin\n";
+    
+    cetak_input_tengah("Total Poin    : ");
+    cout << totalPoin << " poin\n";
+    
+    cetakTengah("--------------------------------------------");
+    pause();
 }
 
 void lihatPoin() {
-    cout << "\n============================================\n";
-    cout << "              TOTAL POIN \n";
-    cout << "============================================\n";
-    cout << "Total Poin Anda : " << totalPoin << " poin" << endl;
-    cout << "----------------------------------------------\n" << endl;
+    cetakTengah("============================================");
+    cetakTengah("TOTAL POIN");
+    cetakTengah("============================================");
+    
+    cetak_input_tengah("Total Poin Anda : ");
+    cout << totalPoin << " poin\n";
+    
+    cetakTengah("--------------------------------------------");
 }
 
 void riwayatTransaksi() {
-    cout << "\n====== RIWAYAT TRANSAKSI HARI INI (MODE ADMIN) ======" << endl;
+    cetakTengah("====== RIWAYAT TRANSAKSI HARI INI (MODE ADMIN) ======");
     
     if (jumlahTransaksi == 0) {
-        cout << "Belum ada transaksi yang terjadi hari ini." << endl;
+        cetak_opsi_tengah("Belum ada transaksi yang terjadi hari ini.");
     } else {
         int totalPendapatan = 0;
         
-        // Looping untuk membaca isi Array
         for (int i = 0; i < jumlahTransaksi; i++) {
-            cout << "Transaksi ke-" << (i + 1) << "\t: Rp " << transaksi[i] << endl;
+            cetak_input_tengah("Transaksi ke-");
+            cout << (i + 1) << "\t: Rp " << transaksi[i] << "\n";
             totalPendapatan += transaksi[i];
         }
-        cout << "-----------------------------------------------------" << endl;
-        cout << "Total Pendapatan : Rp " << totalPendapatan << endl;
-        cout << "Total Transaksi  : " << jumlahTransaksi << " kali" << endl;
+        cetakTengah("-----------------------------------------------------");
+        
+        cetak_input_tengah("Total Pendapatan : Rp ");
+        cout << totalPendapatan << "\n";
+        
+        cetak_input_tengah("Total Transaksi  : ");
+        cout << jumlahTransaksi << " kali\n";
     }
-    cout << "=====================================================\n" << endl;
+    cetakTengah("=====================================================");
 }
 
 // int main () {

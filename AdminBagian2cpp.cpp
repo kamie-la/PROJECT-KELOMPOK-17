@@ -5,26 +5,26 @@ void editBarang(Barang daftarBarang[], int &jumlahBarang) {
     string idCari;
     bool ditemukan = false;
 
-    cout << "\nMasukkan ID Barang yang ingin diedit : ";
+    cetak_input_tengah("\nMasukkan ID Barang yang ingin diedit : ");
     cin >> idCari;
 
     for (int i = 0; i < jumlahBarang; i++) {
         if (daftarBarang[i].id == idCari) {
             Barang *ptr = &daftarBarang[i];
 
-            cout << "\nID Barang ditemukan!\n";
+            cetak_opsi_tengah("\nID Barang ditemukan!");
 
-            cout << "Masukkan Nama Baru  : ";
+            cetak_input_tengah("Masukkan Nama Baru  : ");
             cin.ignore();
             getline(cin, ptr->nama);
 
-            cout << "Masukkan Harga Baru : ";
+            cetak_input_tengah("Masukkan Harga Baru : ");
             cin >> ptr->harga;
 
-            cout << "Masukkan Stok Baru  : ";
+            cetak_input_tengah("Masukkan Stok Baru  : ");
             cin >> ptr->stok;
 
-            cout << "\nData barang berhasil diperbarui!\n";
+            cetak_opsi_tengah("\nData barang berhasil diperbarui!");
 
             ditemukan = true;
             break;
@@ -32,7 +32,7 @@ void editBarang(Barang daftarBarang[], int &jumlahBarang) {
     }
 
     if (!ditemukan) {
-        cout << "\nID Barang tidak ditemukan!\n";
+        cetak_opsi_tengah("\n[!] ID Barang tidak ditemukan!");
     }
 }
 
@@ -41,7 +41,7 @@ void hapusBarang(Barang daftarBarang[], int &jumlahBarang) {
     bool ditemukan = false;
     int indeks = -1;
 
-    cout << "\nMasukkan ID Barang yang ingin dihapus : ";
+    cetak_input_tengah("\nMasukkan ID Barang yang ingin dihapus : ");
     cin >> idCari;
 
     for (int i = 0; i < jumlahBarang; i++) {
@@ -59,11 +59,11 @@ void hapusBarang(Barang daftarBarang[], int &jumlahBarang) {
 
         jumlahBarang--;
 
-        cout << "\nID Barang ditemukan!\n";
-        cout << "Barang berhasil dihapus dari daftar.\n";
+        cetak_opsi_tengah("\nID Barang ditemukan!");
+        cetak_opsi_tengah("Barang berhasil dihapus dari daftar.");
         pause();
     } else {
-        cout << "\nID Barang tidak ditemukan!\n";
+        cetak_opsi_tengah("\n[!] ID Barang tidak ditemukan!");
         pause();
     }
 }
