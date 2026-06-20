@@ -1,60 +1,50 @@
-# Smart Cafe - Terminal Based POS and Loyalty System
 
-Sistem pengelolaan kasir (Point of Sales) dan manajemen loyalitas pelanggan berbasis CLI (Command Line Interface) yang dirancang secara modular menggunakan C++ standar. Proyek ini mengintegrasikan sistem inventaris admin, transaksi penjualan, pencatatan keuangan harian, akuntansi pajak, hingga visualisasi data stok secara real-time.
+# ===================================================================
+SMART CAFE LOYALTY SYSTEM - README DOCUMENT
 
-## Fitur Utama Sistem
+1. DESKRIPSI PROYEK
+---
+Aplikasi berbasis CLI (Command Line Interface) ini dirancang menggunakan bahasa C++ tradisional untuk memenuhi tugas besar laboratorium Informatika Universitas Mataram (UNRAM). Sistem ini mengintegrasikan manajemen inventaris kafe di sisi Admin dengan simulasi transaksi retail dan mini-game gacha berbasis kesetiaan pelanggan (loyalty points) di sisi Pembeli.
 
-1. **Manajemen Inventaris Admin**
-   - Penambahan menu baru dengan pembatasan ID navigasi sistem.
-   - Pembaruan informasi barang (Nama, Harga, Stok) memanfaatkan operasi pointer.
-   - Penghapusan data barang menggunakan algoritma pergeseran array (shifting).
+2. FITUR UTAMA SISTEM
+---
+* Sistem Autentikasi Admin Terbuka: Gerbang masuk ganda (Sign In & Sign Up) menggunakan validasi format NIM mahasiswa Informatika UNRAM, pencegah data duplikat, serta dilengkapi verifikasi keamanan matematika (CAPTCHA) tradisional.
+* Data Persistence Berkas (CSV): Rekam data inventaris bersifat kekal menggunakan pustaka . Setiap perubahan stok akibat penambahan oleh admin atau pembelian oleh customer akan langsung diperbarui ke dalam berkas 'stok_barang.txt'.
+* Audit Kepemilikan Data: Setiap menu baru yang dimasukkan ke dalam sistem akan mencatat nama Admin yang bertanggung jawab menambahkan item tersebut, menjamin transparansi data.
+* Mekanisme Gacha & Pity Rate: Sistem penukaran poin loyalty belanja menjadi kuota undian hadiah acak yang terbagi menjadi tiga tier kelangkaan (R, SR, SSR) serta jaminan garansi kelangkaan (Pity) pada kelipatan paket tertentu.
+* Ritual Maneki Neko Mini-Game: Mini-game tangkap koin interaktif yang memberikan berkas peningkatan peluang (Buff SSR) untuk tiga sesi tarikan gacha berikutnya, dikunci dengan sistem validasi anti-leak numerik.
+* Visualisasi Grafik & Struk Digital: Representasi kondisi stok kritis menggunakan bar horizontal live di terminal, serta cetakan nota pembayaran digital yang presisi di tengah layar memanfaatkan fungsi pemformatan string tradisional kelompok.
 
-2. **Transaksi Pelanggan & POS**
-   - Pemilihan item belanja interaktif berdasarkan ID menu.
-   - Validasi otomatis ketersediaan stok barang sebelum transaksi diproses.
-   - Pembaruan sisa stok di memori utama secara real-time setelah pembelian berhasil.
+3. ARSITEKTUR KODE DAN PEMBAGIAN KERJA KELOMPOK
+---
+Proyek ini dibangun menggunakan konsep pemrograman modular tradisional dengan memecah fungsionalitas ke dalam beberapa berkas terpisah yang disatukan melalui berkas utama (main.cpp):
 
-3. **Backend Keuangan & Manajemen Poin**
-   - Akumulasi poin loyalitas otomatis (kelipatan Rp 10.000) ke akun global pembeli.
-   - Pencatatan riwayat pengeluaran belanja harian ke dalam array global.
-   - Kalkulasi total pendapatan kotor dan frekuensi transaksi harian untuk laporan admin.
+* main.cpp: Pusat kendali aplikasi, inisialisasi awal data dari hardisk, serta manajemen gerbang pemilihan peran (Role Selection).
+* utilitas.cpp: Berisi sekumpulan fungsi pembantu bersama (helper functions), fungsi penyehat terminal (cls, pause), algoritma cetakTengah, manajemen simpan-muat file, serta macros warna gradien diagonal cyberpunk.
+* minigame.cpp: Logika utama permainan interaktif penangkap koin keberuntungan Maneki Neko (Dikerjakan oleh: M. Pradifta Arizona).
+* undian.cpp: Manajemen database hadiah gacha global, penentuan peluang matematika acak, dan pengelolaan menu penukaran loyalty poin (Dikerjakan oleh: Rizka Dzuliyatun Ni'mah).
+* admin 1.cpp: Gerbang masuk admin, verifikasi akun menggunakan file teks terpisah, dan fungsionalitas input barang baru (Dikerjakan oleh: Ni Ketut Intan Ayu Widyastuti).
+* AdminBagian2cpp.cpp: Logika manipulasi array lanjutan untuk kebutuhan edit data menu, penghapusan item kafe, dan grafik stok visual (Dikerjakan oleh: Hari Fitratullah).
+* customerTransaction.cpp: Alur belanja pembeli, kalkulasi pajak restoran 11%, biaya layanan, penanganan error handling input huruf/spasi, dan pencetakan nota pembelian digital (Dikerjakan oleh: Baiq Nur Saqinah Kamila).
+* poin.cpp: Modul pelacakan saldo poin kesetiaan pembeli dan perekaman riwayat transaksi (Dikerjakan oleh: I Dewa Made Krisnayana Wicaksana).
 
-4. **Mesin Nota Digital & Akuntansi (Fitur Advanced)**
-   - Perhitungan otomatis Pajak Restoran (PB1) sebesar 11% dan biaya layanan.
-   - Cetak struk belanja dengan penataan rata kanan-kiri yang presisi memanfaatkan manipulator `<iomanip>`.
-   - Sinkronisasi tanggal dan waktu nota secara real-time berdasarkan jam internal komputer.
-   - Efek suara trigger bell terminal (`\a`) saat nota dicetak.
+4. PETUNJUK KOMPILASI DAN MENJALANKAN APLIKASI
+---
+Proses kompilasi tradisional wajib dilakukan melalui Terminal (PowerShell/CMD/Bash) dari direktori root proyek tempat seluruh file source code (.cpp) berada:
 
-5. **Visualisasi Grafik Stok Dinamis (Fitur Advanced)**
-   - Representasi visual jumlah stok barang menggunakan grafik batang tekstual.
-   - Sistem pewarnaan dinamis berbasis ANSI Escape Code (Hijau = Aman, Kuning = Sedang, Merah = Kritis).
-
-## Struktur Arsitektur Berkas
-
-Proyek ini menggunakan pendekatan modular di mana setiap komponen fungsional diisolasi ke dalam berkas terpisah untuk menjaga kebersihan kode:
-
-- `main.cpp` : Kompilator pusat program, inisialisasi data, dan handler menu utama pilihan role.
-- `utilitas.cpp` : Library pendukung visual, makro warna ANSI, fungsi hapus layar, jeda terminal, penataan teks tengah, grafik stok, dan mesin cetak nota digital.
-- `admin 1.cpp` : Modul penambahan menu baru dan fungsi menampilkan seluruh daftar barang di kafe.
-- `AdminBagian2cpp.cpp` : Modul pengeditan data barang dan penghapusan menu dari daftar inventaris.
-- `poin.cpp` : Modul backend pengolah poin loyalty, array pencatat riwayat omset, dan kalkulator pendapatan admin.
-- `customerTransaction.cpp` : Modul antarmuka alur belanja pembeli dan validasi kuantitas stok.
-
-## Prasyarat Sistem
-
-Untuk mengompilasi dan menjalankan program ini, pastikan perangkat Anda telah terpasang:
-- GCC Compiler (mendukung standar C++11 atau lebih baru)
-- Terminal yang mendukung ANSI Escape Code (VS Code Terminal, Windows Terminal, atau Linux Shell)
-
-## Langkah Kompilasi dan Menjalankan Program
-
-1. Buka terminal pada direktori tempat seluruh berkas `.cpp` proyek disimpan.
-2. Jalankan perintah kompilasi dengan merujuk pada berkas utama `main.cpp`:
-```bash
-g++ main.cpp -o smart_cafe
+Step 1 - Perintah Kompilasi (g++ compiler):
 ```
-3. Jalankan file biner yang telah berhasil terbentuk:
-```bash
-./smart_cafe
+g++ main.cpp -o SmartCafeApp
 ```
-moga dapet A aminnnnnnn
+Step 2 - Perintah Menjalankan Aplikasi:
+
+* Di OS Windows (PowerShell/CMD):
+```
+.\SmartCafeApp.exe
+```
+* Di OS Linux / MacOS (Terminal):
+```
+./SmartCafeApp
+```
+# Catatan Sistem:
+Aplikasi ini sudah dilengkapi konfigurasi pemosisian UTF-8 otomatis (chcp 65001) pada sistem Windows agar karakter grafik balok stok (█) dan warna True Color 24-bit miring diagonal dapat merender secara tajam dan rapi di layar terminal penguji.

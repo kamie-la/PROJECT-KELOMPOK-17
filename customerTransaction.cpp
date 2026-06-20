@@ -10,6 +10,7 @@ void beliBarang(Barang arr[], int jumlah) {
         if (jumlah == 0) {
             cetak_opsi_tengah("[!] Tidak Ada Barang");
             pause();
+            return;
         }
         string idPilihan;
         cetak_input_tengah("\nMasukkan ID Menu yang ingin dibeli (Tekan 0 untuk keluar): ");
@@ -27,7 +28,7 @@ void beliBarang(Barang arr[], int jumlah) {
         }
     
         if (indexDitemukan == -1) {
-            cetak_opsi_tengah("\n[!] Menu dengan ID " + idPilihan + " tidak ditemukan.");
+            cetak_opsi_tengah("\n" MERAH "[!] Menu dengan ID " + idPilihan + " tidak ditemukan." RESET);
             pause();
             continue;
         }
@@ -44,16 +45,31 @@ void beliBarang(Barang arr[], int jumlah) {
     
         int jumlahBeli;
         cetak_input_tengah("\nMasukkan jumlah beli: ");
-        cin >> jumlahBeli;
+        
+        if (!(cin >> jumlahBeli)) {
+            cetak_opsi_tengah("\n" MERAH "[!] Error: Input harus berupa angka bulat dan tidak boleh ada karakter/spasi!" RESET);
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            pause();
+            continue;
+        }
+
+        if (cin.peek() == ' ' || cin.peek() == '\t') {
+            cetak_opsi_tengah("\n" MERAH "[!] Error: Input tidak boleh mengandung spasi!" RESET);
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            pause();
+            continue;
+        }
     
         if (jumlahBeli <= 0) {
-            cetak_opsi_tengah("\n[!] Jumlah beli tidak valid.");
+            cetak_opsi_tengah("\n" MERAH "[!] Error: Jumlah beli harus lebih besar dari 0!" RESET);
             pause();
             continue;
         }
         
         if (jumlahBeli > itemDipilih->stok) {
-            cetak_input_tengah("\n[!] Stok tidak cukup! Stok tersedia hanya ");
+            cetak_input_tengah("\n" MERAH "[!] Stok tidak cukup! Stok tersedia hanya " RESET);
             cout << itemDipilih->stok << " item.\n";
             pause();
             continue;
@@ -62,12 +78,17 @@ void beliBarang(Barang arr[], int jumlah) {
         double totalHarga = itemDipilih->harga * jumlahBeli;
     
         itemDipilih->stok -= jumlahBeli;
+        
+        simpan_stok_ke_file(arr, jumlah);
     
-        cetak_input_tengah("\n[✓] Pembelian berhasil! Sisa stok \"");
+        cetak_input_tengah("\n" HIJAU "[✓] Pembelian berhasil! Sisa stok \"" RESET);
         cout << itemDipilih->nama << "\": " << itemDipilih->stok << "\n";
     
         prosesTransaksi((int)totalHarga);
+        
         int kalkulasi_poin = (int)totalHarga / 10000;
+        totalPoin += kalkulasi_poin;
+        
         cetak_invoice_digital(itemDipilih->nama, itemDipilih->harga, jumlahBeli, kalkulasi_poin);
         pause();
     }
@@ -109,23 +130,29 @@ void menu_pembeli(Barang daftar_menu[], int jumlah_barang, int &total_poin, Hadi
                 pause();
                 break;
             case 5:
-                if (sisa_buff_draw > 0) {
-                        cls();
-                        cetak_banner();
-                        cetakTengah("=====================================================");
-                        cetakTengah("PERINGATAN: BERKAT MANEKI NEKO MASIH GACOR!");
-                        cetakTengah("=====================================================");
-                        cout << "\n";
-                        cetak_opsi_tengah(MERAH "[!] Anda masih memiliki kuota " + to_string(sisa_buff_draw) + " kali gacha beruntung." RESET);
-                        cetak_opsi_tengah("Silakan gunakan sisa buff Anda di menu gacha terlebih dahulu!");
-                        cout << "\n";
-                        cetakTengah("=====================================================");
-                        pause();
-                } else {
-                        if (mainkan_game_maneki_catch()) {
-                            sisa_buff_draw = 3;
-                        }
+                if (sisa_buff_draw != 0) {
+                    cls();
+                    cetak_banner();
+                    cetakTengah("=====================================================");
+                    cetakTengah("PERINGATAN: BERKAT MANEKI NEKO MASIH AKTIF!");
+                    cetakTengah("=====================================================");
+                    cout << "\n";
+                    
+                    int kuota_tampil = (sisa_buff_draw < 0) ? 0 : sisa_buff_draw;
+                    if (sisa_buff_draw < 0) {
+                        sisa_buff_draw = 0;
                     }
+
+                    cetak_opsi_tengah(MERAH "[!] Anda masih memiliki kuota gacha beruntung." RESET);
+                    cetak_opsi_tengah("Silakan gunakan sisa buff Anda di menu gacha terlebih dahulu!");
+                    cout << "\n";
+                    cetakTengah("=====================================================");
+                    pause();
+                } else {
+                    if (mainkan_game_maneki_catch()) {
+                        sisa_buff_draw = 3;
+                    }
+                }
                 break;
             case 0:
                 cetak_opsi_tengah(HIJAU "     Kembali ke Role Selection" RESET);

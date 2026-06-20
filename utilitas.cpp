@@ -11,6 +11,11 @@ using namespace std;
 #define BIRU    "\033[34m"
 #define CYAN    "\033[36m"
 #define BOLD    "\033[1m"
+#define NEON_PINK    "\033[38;2;255;0;127m"
+#define HOT_MAGENTA  "\033[38;2;225;0;255m"
+#define NEON_PURPLE  "\033[38;2;150;0;255m"
+#define DEEP_BLUE    "\033[38;2;0;100;255m"
+#define CYBER_CYAN   "\033[38;2;0;240;255m"
 void cls() {
     cout << "\033[2J\033[H";
 }
@@ -56,13 +61,50 @@ void cetak_banner() {
     int lebar_ascii = 66;
     int s = (lebar_terminal - lebar_ascii) / 2;
     string pad(s > 0 ? s : 0, ' ');
-    cout << BOLD << CYAN;
-    cout << pad << "  ____  __  __    _    ____ _____    ____    _     _____ _____ \n";
-    cout << pad << " / ___||  \\/  |  / \\  |  _ \\_   _|  / ___|  / \\   |  ___| ____|\n";
-    cout << pad << " \\___ \\| |\\/| | / _ \\ | |_) || |   | |     / _ \\  | |_  |  _|  \n";
-    cout << pad << "  ___) | |  | |/ ___ \\|  _ < | |   | |___ / ___ \\ |  _| | |___ \n";
-    cout << pad << " |____/|_|  |_/_/   \\_\\_| \\_\\|_|    \\____/_/   \\_\\|_|   |_____|\n";
-    cetakTengah("===================================================================");
+    cout << BOLD;
+
+    // Baris 1: Didominasi Pink di kiri, Cyan baru muncul di ujung kanan
+    cout << pad 
+         << NEON_PINK   << "  ____  __  __    _    ____ "
+         << HOT_MAGENTA << "_____    "
+         << NEON_PURPLE << "____    _     "
+         << CYBER_CYAN  << "_____ _____ \n";
+
+    // Baris 2: Magenta dan Purple mulai bergeser maju ke kiri
+    cout << pad 
+         << NEON_PINK   << " / ___||  \\/  |  / \\  |"
+         << HOT_MAGENTA << "  _ \\_   _|  "
+         << NEON_PURPLE << "/ ___|  / \\   "
+         << CYBER_CYAN  << "|  ___| ____|\n";
+
+    // Baris 3: Tengah-tengah didominasi Purple, Cyan semakin maju
+    cout << pad 
+         << NEON_PINK   << " \\___ \\| |\\/| | / "
+         << HOT_MAGENTA << "_ \\ | |_) || |    "
+         << NEON_PURPLE << "| |    / _ \\  "
+         << CYBER_CYAN  << "| |_  |  _|  \n";
+
+    // Baris 4: Pink semakin sedikit di ujung kiri, didominasi Purple & Cyan
+    cout << pad 
+         << NEON_PINK   << "  ___) | | "
+         << HOT_MAGENTA << " | |/ ___ \\|  _ < | |    "
+         << NEON_PURPLE << "| |___ "
+         << CYBER_CYAN  << "/ ___ \\ |  _| | |___ \n";
+
+    // Baris 5: Pojok kiri bawah sudah berubah menjadi Magenta/Purple, Cyan menguasai kanan
+    cout << pad 
+         << NEON_PINK   << " |____/"
+         << HOT_MAGENTA << "|_|  |_/_/   \\_\\_| \\_\\|_|    "
+         << NEON_PURPLE << "\\____/"
+         << CYBER_CYAN  << "_/   \\_\\|_|   |_____|\n";
+
+    // Baris Pembatas
+    cout << pad 
+         << NEON_PINK   << "================" 
+         << HOT_MAGENTA << "=================" 
+         << NEON_PURPLE << "=================" 
+         << CYBER_CYAN  << "================\n";
+
     cout << RESET;
 }
 void grafik_stok(Barang arr[], int jumlah) {
@@ -119,45 +161,83 @@ void cetak_invoice_digital(string nama_barang, int harga_satuan, int jumlah_beli
     double biaya_servis = 2000;      
     double total_akhir = sub_total + kalkulasi_pajak + biaya_servis;
 
-    cout << "\a" << KUNING << "*klontoooong*\n" << RESET; 
+    cout << "\a" << KUNING;
+    cetakTengah("*klontoooong*");
+    cout << RESET; 
     
-    // Format cetak tabel struk dipertahankan agar baris lurus ke bawah secara simetris
-    cout << BOLD << CYAN << "=====================================================\n" << RESET;
+    cout << BOLD << CYAN;
+    cetakTengah("=====================================================");
+    cout << RESET;
     cetakTengah("SMART CAFE - NOTA PEMBAYARAN DIGITAL");
-    cout << BOLD << CYAN << "=====================================================\n" << RESET;
+    cout << BOLD << CYAN;
+    cetakTengah("=====================================================");
+    cout << RESET;
     
-    cout << left << setw(18) << "Tanggal Nota" << ": " 
-         << setfill('0') << setw(2) << tanggal_aktif << "/" 
-         << setw(2) << bulan_aktif << "/" 
-         << tahun_aktif << setfill(' ') << "\n";
-         
-    cout << left << setw(18) << "Status" << ": " << HIJAU << "LUNAS (Cashless)\n" << RESET;
-    cout << "-----------------------------------------------------\n";
+    string s_tanggal = "Tanggal Nota      : " + to_string(tanggal_aktif) + "/" + to_string(bulan_aktif) + "/" + to_string(tahun_aktif);
+    string s_status  = "Status            : LUNAS (Cashless)";
+    
+    cetakTengah(s_tanggal);
+    cetakTengah(s_status);
+    cetakTengah("-----------------------------------------------------");
 
-    cout << left << setw(25) << "Item" 
-         << right << setw(7) << "Qty" 
-         << right << setw(18) << "Total" << "\n";
-    cout << "-----------------------------------------------------\n";
+    cetakTengah("Item                     Qty                 Total");
+    cetakTengah("-----------------------------------------------------");
     
-    cout << left << setw(25) << nama_barang 
-         << right << setw(7) << jumlah_beli 
-         << right << setw(15) << "Rp " << sub_total << "\n";
-         
-    cout << "-----------------------------------------------------\n";
+    // 1. Format Baris Item
+    string s_item = nama_barang;
+    if (s_item.length() < 25) s_item.append(25 - s_item.length(), ' ');
     
-    cout << left << setw(32) << "Subtotal" << right << setw(15) << "Rp " << sub_total << "\n";
-    cout << left << setw(32) << "Pajak Restoran (11%)" << right << setw(15) << "Rp " << kalkulasi_pajak << "\n";
-    cout << left << setw(32) << "Biaya Layanan/Service" << right << setw(15) << "Rp " << biaya_servis << "\n";
-    cout << "-----------------------------------------------------\n";
+    string s_qty = to_string(jumlah_beli);
+    if (s_qty.length() < 7) s_qty.append(7 - s_qty.length(), ' ');
     
-    cout << BOLD << left << setw(32) << "TOTAL PEMBAYARAN" 
-         << HIJAU << right << setw(15) << "Rp " << total_akhir << RESET << "\n";
-    cout << "=====================================================\n";
+    string s_harga = "Rp " + to_string((int)sub_total);
+    if (s_harga.length() < 21) s_harga.insert(0, 21 - s_harga.length(), ' ');
     
-    cout << KUNING << "[+] Poin Loyalty yang didapat dari item ini: " << total_poin_didapat << " Poin\n" << RESET;
-    cout << "=====================================================\n";
+    cetakTengah(s_item + s_qty + s_harga);
+    cetakTengah("-----------------------------------------------------");
+    
+    // 2. Format Baris Subtotal
+    string b_sub = "Subtotal";
+    if (b_sub.length() < 35) b_sub.append(35 - b_sub.length(), ' ');
+    string v_sub = "Rp " + to_string((int)sub_total);
+    if (v_sub.length() < 18) v_sub.insert(0, 18 - v_sub.length(), ' ');
+    cetakTengah(b_sub + v_sub);
+
+    // 3. Format Baris Pajak
+    string b_pajak = "Pajak Restoran (11%)";
+    if (b_pajak.length() < 35) b_pajak.append(35 - b_pajak.length(), ' ');
+    string v_pajak = "Rp " + to_string((int)kalkulasi_pajak);
+    if (v_pajak.length() < 18) v_pajak.insert(0, 18 - v_pajak.length(), ' ');
+    cetakTengah(b_pajak + v_pajak);
+
+    // 4. Format Baris Biaya Layanan
+    string b_servis = "Biaya Layanan/Service";
+    if (b_servis.length() < 35) b_servis.append(35 - b_servis.length(), ' ');
+    string v_servis = "Rp " + to_string((int)biaya_servis);
+    if (v_servis.length() < 18) v_servis.insert(0, 18 - v_servis.length(), ' ');
+    cetakTengah(b_servis + v_servis);
+    
+    cetakTengah("-----------------------------------------------------");
+    
+    // 5. Format Baris Total Akhir
+    string b_total = "TOTAL PEMBAYARAN";
+    if (b_total.length() < 35) b_total.append(35 - b_total.length(), ' ');
+    string v_total = "Rp " + to_string((int)total_akhir);
+    if (v_total.length() < 18) v_total.insert(0, 18 - v_total.length(), ' ');
+    cetakTengah(b_total + v_total);
+    
+    cetakTengah("=====================================================");
+    
+    string s_poin = "[+] Poin Loyalty yang didapat dari item ini: " + to_string(total_poin_didapat) + " Poin";
+    cout << KUNING;
+    cetakTengah(s_poin);
+    cout << RESET;
+    
+    cetakTengah("=====================================================");
     cetakTengah("Terima kasih atas kunjungan Anda!");
-    cout << BOLD << CYAN << "=====================================================\n" << RESET;
+    cout << BOLD << CYAN;
+    cetakTengah("=====================================================");
+    cout << RESET;
 }
 void simpan_stok_ke_file(Barang daftar[], int jumlah) {
     ofstream file("stok_barang.txt");
