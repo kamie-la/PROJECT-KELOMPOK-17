@@ -6,25 +6,21 @@ void editBarang(Barang daftarBarang[], int &jumlahBarang) {
     bool ditemukan = false;
 
     cetak_input_tengah("\nMasukkan ID Barang yang ingin diedit : ");
-    cin >> idCari;
+    idCari = ambil_input_teks("\nMasukkan ID Barang yang ingin diedit : ", false);
 
     for (int i = 0; i < jumlahBarang; i++) {
         if (daftarBarang[i].id == idCari) {
             Barang *ptr = &daftarBarang[i];
 
-            cetak_opsi_tengah("\nID Barang ditemukan!");
+            cetak_opsi_tengah("\n" HIJAU "[✓] ID Barang ditemukan!" RESET);
 
-            cetak_input_tengah("Masukkan Nama Baru  : ");
-            cin.ignore();
-            getline(cin, ptr->nama);
+            ptr->nama = ambil_input_teks("Masukkan Nama Baru  : ", false);
 
-            cetak_input_tengah("Masukkan Harga Baru : ");
-            cin >> ptr->harga;
+            ptr->harga = ambil_input_angka("Masukkan Harga Baru : Rp ");
 
-            cetak_input_tengah("Masukkan Stok Baru  : ");
-            cin >> ptr->stok;
+            ptr->stok = ambil_input_angka("Masukkan Stok Baru  : ");
 
-            cetak_opsi_tengah("\nData barang berhasil diperbarui!");
+            cetak_opsi_tengah("\n" HIJAU "[✓] Data barang berhasil diperbarui!" RESET);
 
             ditemukan = true;
             break;
@@ -32,7 +28,7 @@ void editBarang(Barang daftarBarang[], int &jumlahBarang) {
     }
 
     if (!ditemukan) {
-        cetak_opsi_tengah("\n[!] ID Barang tidak ditemukan!");
+        cetak_opsi_tengah("\n" MERAH "[!] ID Barang tidak ditemukan!" RESET);
     }
 }
 
@@ -41,8 +37,7 @@ void hapusBarang(Barang daftarBarang[], int &jumlahBarang) {
     bool ditemukan = false;
     int indeks = -1;
 
-    cetak_input_tengah("\nMasukkan ID Barang yang ingin dihapus : ");
-    cin >> idCari;
+    idCari = ambil_input_teks("\nMasukkan ID Barang yang ingin dihapus : ", false);
 
     for (int i = 0; i < jumlahBarang; i++) {
         if (daftarBarang[i].id == idCari) {
@@ -59,11 +54,11 @@ void hapusBarang(Barang daftarBarang[], int &jumlahBarang) {
 
         jumlahBarang--;
 
-        cetak_opsi_tengah("\nID Barang ditemukan!");
-        cetak_opsi_tengah("Barang berhasil dihapus dari daftar.");
+        cetak_opsi_tengah("\n" HIJAU "[✓] ID Barang ditemukan!" RESET);
+        cetak_opsi_tengah(MERAH "[-] Barang berhasil dihapus dari daftar." RESET);
         pause();
     } else {
-        cetak_opsi_tengah("\n[!] ID Barang tidak ditemukan!");
+        cetak_opsi_tengah("\n" MERAH "[!] ID Barang tidak ditemukan!" RESET);
         pause();
     }
 }

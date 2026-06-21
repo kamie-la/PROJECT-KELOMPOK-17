@@ -40,15 +40,19 @@ int kbhit_posix() {
 bool mainkan_game_maneki_catch() {
     cls();
     cetak_banner();
+    cout << BOLD << NEON_PURPLE;
     cetakTengah("=====================================================");
+    cout << NEON_PINK;
     cetakTengah("MINI GAME: MANEKI NEKO'S GOLDEN COIN CATCH");
+    cout << NEON_PURPLE;
     cetakTengah("=====================================================");
-    cout << "\n";
+    cout << RESET << "\n";
+    
     cetak_opsi_tengah("Tangkap koin emas yang meluncur dari kiri ke kanan!");
-    cetak_opsi_tengah("Ketuk [ SPACEBAR ] tepat saat koin 'o' berada di tengah '|'!");
+    cetak_opsi_tengah("Ketuk [ " KUNING "SPACEBAR" RESET " ] tepat saat koin '" KUNING "o" RESET "' berada di tengah '" CYBER_CYAN "|" RESET "'!");
     cout << "\n";
-    cetak_opsi_tengah("Tekan [ ENTER ] untuk mengaktifkan mesin koin...");
-    cetakTengah("-----------------------------------------------------");
+    cetak_opsi_tengah("Tekan [ " HIJAU "ENTER" RESET " ] untuk mengaktifkan mesin koin...");
+    cetakTengah(NEON_PURPLE "--------------------------------------------" RESET);
     
     cin.get();
 
@@ -63,33 +67,34 @@ bool mainkan_game_maneki_catch() {
     string pad(s > 0 ? s : 0, ' ');
 
     cout << "\n\n\n\n\n\n";
+    
+    cout << "\033[?25l"; 
 
-while (nyawa > 0 && skor_koin < 3) {
-        cout << "\033[6A";
+    while (nyawa > 0 && skor_koin < 3) {
 
-        // Perbaikan posisi \033[K dipindah ke depan setelah pad
-        cout << pad << "\033[K        /\\_/\\     \n";
-        cout << pad << "\033[K       ( o.o )    \n";
-        cout << pad << "\033[K        \\ _ /     \n";
-
-        cout << pad << "\033[K  [";
+        string lintasan_koin = "";
         for (int j = 0; j < batas_lebar; j++) {
             if (j == posisi_koin) {
-                cout << KUNING << "o" << RESET;
+                lintasan_koin += string(BOLD) + KUNING + "o" + RESET;
             } else if (j == 15) {
-                cout << CYAN << "|" << RESET;
+                lintasan_koin += string(BOLD) + CYBER_CYAN + "|" + RESET;
             } else {
-                cout << "-";
+                lintasan_koin += "\033[2m-\033[0m";
             }
         }
-        cout << "]\n";
-
-        cout << pad << "\033[K   Mangkuk: [   |   ] \n";
 
         string s_status = "Koin Tertangkap: " + to_string(skor_koin) + " / 3  |  Sisa Kesempatan: " + to_string(nyawa);
         int s_center = (lebar_terminal - s_status.length()) / 2;
         string pad_status(s_center > 0 ? s_center : 0, ' ');
-        cout << "\r" << pad_status << "\033[K" << s_status << flush;
+        cout << "\033[6A"
+             << pad << "\033[K        " << BOLD << NEON_PINK << "/\\_/\\" << RESET << "     \n"
+             << pad << "\033[K       " << BOLD << NEON_PINK << "( " << KUNING << "o" << NEON_PINK << "." << KUNING << "o" << NEON_PINK << " )" << RESET << "    \n"
+             << pad << "\033[K        " << BOLD << NEON_PINK << "\\ _ /" << RESET << "     \n"
+             << pad << "\033[K  " << NEON_PURPLE << "[" << RESET << lintasan_koin << NEON_PURPLE << "]\n" << RESET
+             << pad << "\033[K   Mangkuk: " << CYBER_CYAN << "[   |   ]" << RESET << " \n"
+             << "\r" << pad_status << "\033[K" 
+             << HIJAU << "Koin Tertangkap: " << BOLD << skor_koin << RESET << " / 3  |  "
+             << (nyawa == 1 ? MERAH : KUNING) << "Sisa Kesempatan: " << BOLD << nyawa << RESET << flush;
 
         bool tombol_ditekan = false;
 #if defined(_WIN32) || defined(_WIN64)
@@ -127,26 +132,34 @@ while (nyawa > 0 && skor_koin < 3) {
 
         this_thread::sleep_for(chrono::milliseconds(kecepatan));
     }
+    cout << "\033[?25h"; 
 
     cls();
     cetak_banner();
+    cout << BOLD << NEON_PURPLE;
     cetakTengah("=====================================================");
+    cout << NEON_PINK;
     cetakTengah("KEPUTUSAN REZEKI MANEKI NEKO");
+    cout << NEON_PURPLE;
     cetakTengah("=====================================================");
-    cout << "\n";
+    cout << RESET << "\n";
 
     if (skor_koin >= 3) {
         cetak_opsi_tengah(HIJAU "[✓] BERHASIL! Mangkuk Anda penuh terisi koin keberuntungan." RESET);
         cetak_opsi_tengah("Maneki Neko mengaktifkan Buff Pity SSR (+5%) untuk 3 Draw!");
         cout << "\n";
+        cout << NEON_PURPLE;
         cetakTengah("=====================================================");
+        cout << RESET;
         pause();
         return true;
     } else {
         cetak_opsi_tengah(MERAH "[!] GAGAL! Koin berjatuhan berserakan di lantai kafe." RESET);
         cetak_opsi_tengah("Gagal menyelaraskan ritme (Kau orang sial btw).");
         cout << "\n";
+        cout << NEON_PURPLE;
         cetakTengah("=====================================================");
+        cout << RESET;
         pause();
         return false;
     }

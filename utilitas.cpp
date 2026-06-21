@@ -3,7 +3,10 @@
 #include <limits>
 #include <iomanip>
 #include <ctime>
+#include <fstream>
+
 using namespace std;
+
 #define RESET   "\033[0m"
 #define MERAH   "\033[31m"
 #define HIJAU   "\033[32m"
@@ -16,6 +19,12 @@ using namespace std;
 #define NEON_PURPLE  "\033[38;2;150;0;255m"
 #define DEEP_BLUE    "\033[38;2;0;100;255m"
 #define CYBER_CYAN   "\033[38;2;0;240;255m"
+
+// Prototipe Fungsi Utama
+int ambil_input_angka(string teks_panduan);
+string ambil_input_teks(string teks_panduan, bool boleh_kosong);
+void simpan_stok_ke_file(Barang arr[], int jumlah);
+
 void cls() {
     cout << "\033[2J\033[H";
 }
@@ -37,6 +46,7 @@ void cetakTengah(string teks) {
     }
     cout << teks << endl;
 }
+
 void cetak_opsi_tengah(string teks_menu) {
     int lebar_terminal = 112;
     int lebar_konten = 40;
@@ -44,6 +54,7 @@ void cetak_opsi_tengah(string teks_menu) {
     string pad(s > 0 ? s : 0, ' ');
     cout << pad << teks_menu << "\n";
 }
+
 void cetak_input_tengah(string teks_menu) {
     int lebar_terminal = 112;
     int lebar_konten = 40;
@@ -51,11 +62,12 @@ void cetak_input_tengah(string teks_menu) {
     string pad(s > 0 ? s : 0, ' ');
     cout << pad << teks_menu;
 }
+
 void pause() {
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cetak_input_tengah("\nTekan ENTER untuk melanjutkan...");
     cin.get();
 }
+
 void cetak_banner() {
     int lebar_terminal = 128;
     int lebar_ascii = 66;
@@ -63,87 +75,103 @@ void cetak_banner() {
     string pad(s > 0 ? s : 0, ' ');
     cout << BOLD;
 
-    // Baris 1: Didominasi Pink di kiri, Cyan baru muncul di ujung kanan
-    cout << pad 
-         << NEON_PINK   << "  ____  __  __    _    ____ "
-         << HOT_MAGENTA << "_____    "
-         << NEON_PURPLE << "____    _     "
-         << CYBER_CYAN  << "_____ _____ \n";
-
-    // Baris 2: Magenta dan Purple mulai bergeser maju ke kiri
-    cout << pad 
-         << NEON_PINK   << " / ___||  \\/  |  / \\  |"
-         << HOT_MAGENTA << "  _ \\_   _|  "
-         << NEON_PURPLE << "/ ___|  / \\   "
-         << CYBER_CYAN  << "|  ___| ____|\n";
-
-    // Baris 3: Tengah-tengah didominasi Purple, Cyan semakin maju
-    cout << pad 
-         << NEON_PINK   << " \\___ \\| |\\/| | / "
-         << HOT_MAGENTA << "_ \\ | |_) || |    "
-         << NEON_PURPLE << "| |    / _ \\  "
-         << CYBER_CYAN  << "| |_  |  _|  \n";
-
-    // Baris 4: Pink semakin sedikit di ujung kiri, didominasi Purple & Cyan
-    cout << pad 
-         << NEON_PINK   << "  ___) | | "
-         << HOT_MAGENTA << " | |/ ___ \\|  _ < | |    "
-         << NEON_PURPLE << "| |___ "
-         << CYBER_CYAN  << "/ ___ \\ |  _| | |___ \n";
-
-    // Baris 5: Pojok kiri bawah sudah berubah menjadi Magenta/Purple, Cyan menguasai kanan
-    cout << pad 
-         << NEON_PINK   << " |____/"
-         << HOT_MAGENTA << "|_|  |_/_/   \\_\\_| \\_\\|_|    "
-         << NEON_PURPLE << "\\____/"
-         << CYBER_CYAN  << "_/   \\_\\|_|   |_____|\n";
-
-    // Baris Pembatas
-    cout << pad 
-         << NEON_PINK   << "================" 
-         << HOT_MAGENTA << "=================" 
-         << NEON_PURPLE << "=================" 
-         << CYBER_CYAN  << "================\n";
+    cout << pad << NEON_PINK   << "  ____  __  __    _    ____ " << HOT_MAGENTA << "_____    " << NEON_PURPLE << "____    _     " << CYBER_CYAN  << "_____ _____ \n";
+    cout << pad << NEON_PINK   << " / ___||  \\/  |  / \\  |" << HOT_MAGENTA << "  _ \\_   _|  " << NEON_PURPLE << "/ ___|  / \\   " << CYBER_CYAN  << "|  ___| ____|\n";
+    cout << pad << NEON_PINK   << " \\___ \\| |\\/| | / " << HOT_MAGENTA << "_ \\ | |_) || |    " << NEON_PURPLE << "| |    / _ \\  " << CYBER_CYAN  << "| |_  |  _|  \n";
+    cout << pad << NEON_PINK   << "  ___) | | " << HOT_MAGENTA << " | |/ ___ \\|  _ < | |    " << NEON_PURPLE << "| |___ " << CYBER_CYAN  << "/ ___ \\ |  _| | |___ \n";
+    cout << pad << NEON_PINK   << " |____/" << HOT_MAGENTA << "|_|  |_/_/   \\_\\_| \\_\\|_|    " << NEON_PURPLE << "\\____/" << CYBER_CYAN  << "_/   \\_\\|_|   |_____|\n";
+    cout << pad << NEON_PINK   << "================" << HOT_MAGENTA << "=================" << NEON_PURPLE << "=================" << CYBER_CYAN  << "================\n";
 
     cout << RESET;
 }
+
 void grafik_stok(Barang arr[], int jumlah) {
     cls();
     cetak_banner();
+    cout << BOLD << NEON_PURPLE;
     cetakTengah("=====================================================");
+    cout << CYBER_CYAN;
     cetakTengah("MONITORING GRAFIK STOK KAFE (LIVE)");
+    cout << BOLD << NEON_PURPLE;
     cetakTengah("=====================================================");
-    cout << "\n";
+    cout << RESET << "\n";
 
     if (jumlah == 0) {
-        cetak_opsi_tengah("[!] Belum ada data barang untuk dibuatkan grafik.");
+        cetak_opsi_tengah(MERAH "[!] Belum ada data barang untuk dibuatkan grafik." RESET);
         return;
     }
+    
     for (int i = 0; i < jumlah; i++) {
-        // Bagian visualisasi bar di bawah dicetak lurus untuk menjaga keutuhan grafik horizontal
-        cout << left << setw(15) << arr[i].nama << " : [";
+        cout << left << setw(15) << arr[i].nama << " : " << NEON_PURPLE << "[" << RESET;
         
         int panjangBatang = arr[i].stok / 2;
         if (panjangBatang > 25) panjangBatang = 25;
         if (arr[i].stok > 0 && panjangBatang == 0) panjangBatang = 1;
 
         for (int j = 0; j < panjangBatang; j++) {
-            cout << HIJAU << "█" << RESET;
+            if (arr[i].stok <= 5) {
+                cout << BOLD << MERAH << "█" << RESET;
+            } else if (arr[i].stok <= 10) {
+                cout << BOLD << KUNING << "█" << RESET;
+            } else {
+                cout << BOLD << HIJAU << "█" << RESET;
+            }
         }
 
         int sisaSpasi = 25 - panjangBatang;
         for (int j = 0; j < sisaSpasi; j++) {
             cout << " ";
         }
-        cout << "] " << arr[i].stok << " item";
+        cout << NEON_PURPLE << "] " << RESET << BOLD << arr[i].stok << RESET << " item";
         if (arr[i].stok <= 5) {
-            cout << MERAH << "  <-- [KRITIS!]" << RESET;
+            cout << BOLD << MERAH << "  <-- [KRITIS!]" << RESET;
         }
         cout << "\n";
     }
-    cout << "\n-----------------------------------------------------\n";
+    cout << "\n" << NEON_PURPLE << "-----------------------------------------------------" << RESET << "\n";
     cetak_input_tengah("Keterangan: Satuan skala batang (1 blok '");
     cout << HIJAU "█" << RESET << "' = 2 item stok)\n";
+
+    bool ada_kritis = false;
+    for (int i = 0; i < jumlah; i++) {
+        if (arr[i].stok <= 5) {
+            ada_kritis = true;
+            break;
+        }
+    }
+
+    if (ada_kritis) {
+        cout << "\n" << BOLD << MERAH << "[⚠️] PERINGATAN: Ditemukan item dengan stok kritis (<= 5)!" << RESET << "\n";
+        cout << BOLD << NEON_PINK << "Rekomendasi tindakan:" << RESET << "\n";
+        for (int i = 0; i < jumlah; i++) {
+            if (arr[i].stok <= 5) {
+                cout << "  - " << arr[i].nama << " (Sisa " << BOLD << MERAH << arr[i].stok << RESET << " item) -> Isi ke " << BOLD << HIJAU << "20" << RESET << "\n";
+            }
+        }
+        
+        cout << "\n";
+        cetak_opsi_tengah(KUNING "1. Ya, Restok Otomatis Semua Barang Kritis" RESET);
+        cetak_opsi_tengah("0. Tidak, Kembali ke Menu Utama Admin");
+        cout << NEON_PURPLE << "-----------------------------------------------------" << RESET << "\n";
+        
+        int pilihan_restok;
+        pilihan_restok = ambil_input_angka("Pilihan Anda: ");
+        
+        if (pilihan_restok == 1) {
+            for (int i = 0; i < jumlah; i++) {
+                if (arr[i].stok <= 5) {
+                    arr[i].stok = 20; 
+                }
+            }
+            simpan_stok_ke_file(arr, jumlah);
+            
+            cout << "\n";
+            cetak_opsi_tengah(HIJAU "[✓] Sukses! Semua item kritis otomatis diisi ulang ke 20 item." RESET);
+        }
+    } else {
+        cout << "\n";
+        cetak_opsi_tengah(HIJAU "[✓] Semua stok barang aman dan terkendali di atas batas kritis." RESET);
+    }
 }
 
 void cetak_invoice_digital(string nama_barang, int harga_satuan, int jumlah_beli, int total_poin_didapat) {
@@ -183,7 +211,6 @@ void cetak_invoice_digital(string nama_barang, int harga_satuan, int jumlah_beli
     cetakTengah("Item                     Qty                 Total");
     cetakTengah("-----------------------------------------------------");
     
-    // 1. Format Baris Item
     string s_item = nama_barang;
     if (s_item.length() < 25) s_item.append(25 - s_item.length(), ' ');
     
@@ -196,21 +223,18 @@ void cetak_invoice_digital(string nama_barang, int harga_satuan, int jumlah_beli
     cetakTengah(s_item + s_qty + s_harga);
     cetakTengah("-----------------------------------------------------");
     
-    // 2. Format Baris Subtotal
     string b_sub = "Subtotal";
     if (b_sub.length() < 35) b_sub.append(35 - b_sub.length(), ' ');
     string v_sub = "Rp " + to_string((int)sub_total);
     if (v_sub.length() < 18) v_sub.insert(0, 18 - v_sub.length(), ' ');
     cetakTengah(b_sub + v_sub);
 
-    // 3. Format Baris Pajak
     string b_pajak = "Pajak Restoran (11%)";
     if (b_pajak.length() < 35) b_pajak.append(35 - b_pajak.length(), ' ');
     string v_pajak = "Rp " + to_string((int)kalkulasi_pajak);
     if (v_pajak.length() < 18) v_pajak.insert(0, 18 - v_pajak.length(), ' ');
     cetakTengah(b_pajak + v_pajak);
 
-    // 4. Format Baris Biaya Layanan
     string b_servis = "Biaya Layanan/Service";
     if (b_servis.length() < 35) b_servis.append(35 - b_servis.length(), ' ');
     string v_servis = "Rp " + to_string((int)biaya_servis);
@@ -219,7 +243,6 @@ void cetak_invoice_digital(string nama_barang, int harga_satuan, int jumlah_beli
     
     cetakTengah("-----------------------------------------------------");
     
-    // 5. Format Baris Total Akhir
     string b_total = "TOTAL PEMBAYARAN";
     if (b_total.length() < 35) b_total.append(35 - b_total.length(), ' ');
     string v_total = "Rp " + to_string((int)total_akhir);
@@ -239,6 +262,7 @@ void cetak_invoice_digital(string nama_barang, int harga_satuan, int jumlah_beli
     cetakTengah("=====================================================");
     cout << RESET;
 }
+
 void simpan_stok_ke_file(Barang daftar[], int jumlah) {
     ofstream file("stok_barang.txt");
     if (file.is_open()) {
@@ -273,4 +297,54 @@ void muat_stok_dari_file(Barang daftar[], int &jumlah) {
         jumlah++;
     }
     file.close();
+}
+
+string proses_enkripsi(string data_asli) {
+    char kunci = 'C'; 
+    string hasil = data_asli;
+    
+    for (size_t i = 0; i < data_asli.length(); i++) {
+        hasil[i] = data_asli[i] ^ kunci;
+    }
+    
+    return hasil;
+}
+
+int ambil_input_angka(string teks_panduan) {
+    int input_user;
+    while (true) {
+        cetak_input_tengah(teks_panduan);
+        if (cin >> input_user) {
+            cin.ignore(10000, '\n'); 
+            return input_user;
+        } else {
+            cetak_opsi_tengah("\n" MERAH "[!] Error: Input harus berupa angka murni!" RESET);
+            cin.clear();
+            cin.ignore(10000, '\n');
+            pause();
+            cout << "\033[5A\033[J";
+        }
+    }
+}
+
+string ambil_input_teks(string teks_panduan, bool boleh_kosong) {
+    string input_user;
+    while (true) {
+        cetak_input_tengah(teks_panduan);
+        
+        cin >> ws; 
+        getline(cin, input_user);
+        
+        if (!input_user.empty() && input_user.back() == '\r') {
+            input_user.pop_back();
+        }
+
+        if (!boleh_kosong && (input_user.empty() || input_user == " " || input_user == "\t")) {
+            cetak_opsi_tengah("\n" MERAH "[!] Error: Input ini tidak boleh kosong atau spasi saja!" RESET);
+            pause();
+            cout << "\033[5A\033[J";
+            continue;
+        }
+        return input_user;
+    }
 }

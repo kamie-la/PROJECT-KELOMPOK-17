@@ -8,13 +8,12 @@ void beliBarang(Barang arr[], int jumlah) {
         cls();
         lihatsemuamenu(arr, jumlah);
         if (jumlah == 0) {
-            cetak_opsi_tengah("[!] Tidak Ada Barang");
+            cetak_opsi_tengah(MERAH "[!] Tidak Ada Barang" RESET);
             pause();
             return;
         }
         string idPilihan;
-        cetak_input_tengah("\nMasukkan ID Menu yang ingin dibeli (Tekan 0 untuk keluar): ");
-        cin >> idPilihan;
+        idPilihan = ambil_input_teks("\nMasukkan ID Menu yang ingin dibeli (Tekan 0 untuk keluar): ", false);
         if (idPilihan == "0"){
             break;
         }
@@ -38,29 +37,14 @@ void beliBarang(Barang arr[], int jumlah) {
         cetak_opsi_tengah("\n[+] Menu dipilih : " + itemDipilih->nama);
         
         cetak_input_tengah("[+] Harga satuan : Rp ");
-        cout << fixed << setprecision(0) << itemDipilih->harga << "\n";
+        cout << BOLD << fixed << setprecision(0) << itemDipilih->harga << RESET << "\n";
         
         cetak_input_tengah("[+] Stok tersedia: ");
-        cout << itemDipilih->stok << "\n";
+        cout << BOLD << CYBER_CYAN << itemDipilih->stok << RESET << "\n";
     
         int jumlahBeli;
-        cetak_input_tengah("\nMasukkan jumlah beli: ");
         
-        if (!(cin >> jumlahBeli)) {
-            cetak_opsi_tengah("\n" MERAH "[!] Error: Input harus berupa angka bulat dan tidak boleh ada karakter/spasi!" RESET);
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            pause();
-            continue;
-        }
-
-        if (cin.peek() == ' ' || cin.peek() == '\t') {
-            cetak_opsi_tengah("\n" MERAH "[!] Error: Input tidak boleh mengandung spasi!" RESET);
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            pause();
-            continue;
-        }
+        jumlahBeli = ambil_input_angka("\nMasukkan jumlah beli: ");
     
         if (jumlahBeli <= 0) {
             cetak_opsi_tengah("\n" MERAH "[!] Error: Jumlah beli harus lebih besar dari 0!" RESET);
@@ -70,7 +54,7 @@ void beliBarang(Barang arr[], int jumlah) {
         
         if (jumlahBeli > itemDipilih->stok) {
             cetak_input_tengah("\n" MERAH "[!] Stok tidak cukup! Stok tersedia hanya " RESET);
-            cout << itemDipilih->stok << " item.\n";
+            cout << BOLD << itemDipilih->stok << RESET << " item.\n";
             pause();
             continue;
         }
@@ -82,7 +66,7 @@ void beliBarang(Barang arr[], int jumlah) {
         simpan_stok_ke_file(arr, jumlah);
     
         cetak_input_tengah("\n" HIJAU "[✓] Pembelian berhasil! Sisa stok \"" RESET);
-        cout << itemDipilih->nama << "\": " << itemDipilih->stok << "\n";
+        cout << itemDipilih->nama << "\": " << BOLD << CYBER_CYAN << itemDipilih->stok << RESET << "\n";
     
         prosesTransaksi((int)totalHarga);
         
@@ -99,9 +83,13 @@ void menu_pembeli(Barang daftar_menu[], int jumlah_barang, int &total_poin, Hadi
     do {
         cls();
         cetak_banner();
+        cout << BOLD << NEON_PURPLE;
         cetakTengah("============================================");
+        cout << NEON_PINK;
         cetakTengah("MENU UTAMA PEMBELI (CUSTOMER)");
+        cout << NEON_PURPLE;
         cetakTengah("============================================");
+        cout << RESET;
         
         cetak_opsi_tengah("     1.Lihat Daftar Menu & Beli Barang");
         cetak_opsi_tengah("     2.Lihat Sisa Loyalty Poin Anda");
@@ -109,11 +97,8 @@ void menu_pembeli(Barang daftar_menu[], int jumlah_barang, int &total_poin, Hadi
         cetak_opsi_tengah("     4.Lihat Inventori Hadiah Anda");
         cetak_opsi_tengah("     5.Ritual Maneki Neko (Buff SSR)");
         cetak_opsi_tengah("     0.Kembali ke Role Selection");
-        
-        cetakTengah("--------------------------------------------");
-        cetak_input_tengah("    Pilihan: ");
-        cin >> pilihan_pembeli;
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cetak_opsi_tengah(NEON_PURPLE "--------------------------------------------" RESET);
+        pilihan_pembeli = ambil_input_angka("    Pilihan: ");
         switch (pilihan_pembeli) {
             case 1:
                 beliBarang(daftar_menu, jumlah_barang);
@@ -133,10 +118,13 @@ void menu_pembeli(Barang daftar_menu[], int jumlah_barang, int &total_poin, Hadi
                 if (sisa_buff_draw != 0) {
                     cls();
                     cetak_banner();
+                    cout << BOLD << NEON_PURPLE;
                     cetakTengah("=====================================================");
+                    cout << MERAH;
                     cetakTengah("PERINGATAN: BERKAT MANEKI NEKO MASIH AKTIF!");
+                    cout << NEON_PURPLE;
                     cetakTengah("=====================================================");
-                    cout << "\n";
+                    cout << RESET << "\n";
                     
                     int kuota_tampil = (sisa_buff_draw < 0) ? 0 : sisa_buff_draw;
                     if (sisa_buff_draw < 0) {
@@ -146,7 +134,9 @@ void menu_pembeli(Barang daftar_menu[], int jumlah_barang, int &total_poin, Hadi
                     cetak_opsi_tengah(MERAH "[!] Anda masih memiliki kuota gacha beruntung." RESET);
                     cetak_opsi_tengah("Silakan gunakan sisa buff Anda di menu gacha terlebih dahulu!");
                     cout << "\n";
+                    cout << NEON_PURPLE;
                     cetakTengah("=====================================================");
+                    cout << RESET;
                     pause();
                 } else {
                     if (mainkan_game_maneki_catch()) {
