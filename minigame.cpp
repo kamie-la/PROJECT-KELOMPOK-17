@@ -66,11 +66,24 @@ bool mainkan_game_maneki_catch() {
     int s = (lebar_terminal - batas_lebar) / 2;
     string pad(s > 0 ? s : 0, ' ');
 
-    cout << "\n\n\n\n\n\n";
-    
-    cout << "\033[?25l"; 
+    // 💡 TRIK BARU: Bersihkan layar total SATU KALI saja sebelum mesin animasi menyala
+    cls(); 
+    cout << "\033[?25l"; // Sembunyikan kursor agar tidak berkedip
 
     while (nyawa > 0 && skor_koin < 3) {
+        
+        // 💡 JANGKAR MUTLAK: Tarik kursor ke pojok kiri atas (0,0) setiap frame!
+        cout << "\033[H"; 
+        
+        // Cetak ulang banner dan header (Akan menimpa teks lama dengan mulus tanpa berkedip)
+        cetak_banner();
+        cout << BOLD << NEON_PURPLE;
+        cetakTengah("=====================================================");
+        cout << NEON_PINK;
+        cetakTengah("MINI GAME: MANEKI NEKO'S GOLDEN COIN CATCH");
+        cout << NEON_PURPLE;
+        cetakTengah("=====================================================");
+        cout << RESET << "\n\n";
 
         string lintasan_koin = "";
         for (int j = 0; j < batas_lebar; j++) {
@@ -86,8 +99,9 @@ bool mainkan_game_maneki_catch() {
         string s_status = "Koin Tertangkap: " + to_string(skor_koin) + " / 3  |  Sisa Kesempatan: " + to_string(nyawa);
         int s_center = (lebar_terminal - s_status.length()) / 2;
         string pad_status(s_center > 0 ? s_center : 0, ' ');
-        cout << "\033[6A"
-             << pad << "\033[K        " << BOLD << NEON_PINK << "/\\_/\\" << RESET << "     \n"
+        
+        // Render game di bawah header
+        cout << pad << "\033[K        " << BOLD << NEON_PINK << "/\\_/\\" << RESET << "     \n"
              << pad << "\033[K       " << BOLD << NEON_PINK << "( " << KUNING << "o" << NEON_PINK << "." << KUNING << "o" << NEON_PINK << " )" << RESET << "    \n"
              << pad << "\033[K        " << BOLD << NEON_PINK << "\\ _ /" << RESET << "     \n"
              << pad << "\033[K  " << NEON_PURPLE << "[" << RESET << lintasan_koin << NEON_PURPLE << "]\n" << RESET
@@ -128,11 +142,12 @@ bool mainkan_game_maneki_catch() {
         posisi_koin++;
         if (posisi_koin >= batas_lebar) {
             posisi_koin = 0;
+            nyawa--; // Koin jatuh tak tertangkap mengurangi nyawa (Fix infinite loop logika sesungguhnya)
         }
 
         this_thread::sleep_for(chrono::milliseconds(kecepatan));
     }
-    cout << "\033[?25h"; 
+    cout << "\033[?25h"; // Munculkan kursor lagi
 
     cls();
     cetak_banner();
