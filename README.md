@@ -17,7 +17,7 @@ Aplikasi Management & Loyalty Program Retail Modern Berbasis Command Line Interf
 
 ## 📖 1. Tentang Proyek
 
-Aplikasi **Smart Cafe Loyalty System** adalah platform retail cafe virtual berbasis terminal murni yang dikembangkan dengan bahasa C++ tradisional menggunakan paradigma *Modular Programming*. 
+Aplikasi **Smart Cafe Loyalty System** adalah platform retail cafe virtual berbasis terminal murni yang dikembangkan dengan bahasa C++ tradisional menggunakan paradigma *Modular Programming* (Tapi boong). 
 
 Proyek ini dirancang untuk mengatasi batasan-batasan standar aplikasi CLI biasa. Tidak hanya sekadar melakukan operasi Input/Output data barang, sistem ini menyatukan manajemen basis data inventaris di sisi **Admin** dengan simulasi transaksi retail, manajemen loyalitas konsumen, serta interaksi visual grafis dan animasi *mini-game arcade* di sisi **Pembeli (Customer)**.
 
