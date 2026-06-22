@@ -51,7 +51,7 @@ bool mainkan_game_maneki_catch() {
     cetak_opsi_tengah("Tangkap koin emas yang meluncur dari kiri ke kanan!");
     cetak_opsi_tengah("Ketuk [ " KUNING "SPACEBAR" RESET " ] tepat saat koin '" KUNING "o" RESET "' berada di tengah '" CYBER_CYAN "|" RESET "'!");
     cout << "\n";
-    cetak_opsi_tengah("Tekan [ " HIJAU "ENTER" RESET " ] untuk mengaktifkan mesin koin...");
+    cetak_opsi_tengah("Tekan [ " HIJAU "ENTER" RESET " ] untuk menyalakan mesin...");
     cetakTengah(NEON_PURPLE "--------------------------------------------" RESET);
     
     cin.get();
@@ -62,28 +62,23 @@ bool mainkan_game_maneki_catch() {
     int batas_lebar = 30;
     int kecepatan = 50;
 
-    int lebar_terminal = 112;
+    int lebar_terminal = 122; 
     int s = (lebar_terminal - batas_lebar) / 2;
     string pad(s > 0 ? s : 0, ' ');
 
-    // 💡 TRIK BARU: Bersihkan layar total SATU KALI saja sebelum mesin animasi menyala
     cls(); 
-    cout << "\033[?25l"; // Sembunyikan kursor agar tidak berkedip
+    cout << "\033[?25l";
+
+    string header_teks = ">> MANEKI NEKO ARCADE <<";
+    int s_head = (lebar_terminal - header_teks.length()) / 2;
+    string pad_head(s_head > 0 ? s_head : 0, ' ');
+    cout << pad_head << BOLD << NEON_PINK << header_teks << "\n\n" << RESET;
+
+    cout << "\033[s"; 
 
     while (nyawa > 0 && skor_koin < 3) {
         
-        // 💡 JANGKAR MUTLAK: Tarik kursor ke pojok kiri atas (0,0) setiap frame!
-        cout << "\033[H"; 
-        
-        // Cetak ulang banner dan header (Akan menimpa teks lama dengan mulus tanpa berkedip)
-        cetak_banner();
-        cout << BOLD << NEON_PURPLE;
-        cetakTengah("=====================================================");
-        cout << NEON_PINK;
-        cetakTengah("MINI GAME: MANEKI NEKO'S GOLDEN COIN CATCH");
-        cout << NEON_PURPLE;
-        cetakTengah("=====================================================");
-        cout << RESET << "\n\n";
+        cout << "\033[u"; 
 
         string lintasan_koin = "";
         for (int j = 0; j < batas_lebar; j++) {
@@ -99,15 +94,13 @@ bool mainkan_game_maneki_catch() {
         string s_status = "Koin Tertangkap: " + to_string(skor_koin) + " / 3  |  Sisa Kesempatan: " + to_string(nyawa);
         int s_center = (lebar_terminal - s_status.length()) / 2;
         string pad_status(s_center > 0 ? s_center : 0, ' ');
-        
-        // Render game di bawah header
-        cout << pad << "\033[K        " << BOLD << NEON_PINK << "/\\_/\\" << RESET << "     \n"
-             << pad << "\033[K       " << BOLD << NEON_PINK << "( " << KUNING << "o" << NEON_PINK << "." << KUNING << "o" << NEON_PINK << " )" << RESET << "    \n"
-             << pad << "\033[K        " << BOLD << NEON_PINK << "\\ _ /" << RESET << "     \n"
+
+        cout << pad << "\033[K        " << BOLD << NEON_PINK << "/\\_/\\" << RESET << "\n"
+             << pad << "\033[K       " << BOLD << NEON_PINK << "( " << KUNING << "o" << NEON_PINK << "." << KUNING << "o" << NEON_PINK << " )" << RESET << "\n"
+             << pad << "\033[K        " << BOLD << NEON_PINK << "\\ _ /" << RESET << "\n"
              << pad << "\033[K  " << NEON_PURPLE << "[" << RESET << lintasan_koin << NEON_PURPLE << "]\n" << RESET
-             << pad << "\033[K   Mangkuk: " << CYBER_CYAN << "[   |   ]" << RESET << " \n"
-             << "\r" << pad_status << "\033[K" 
-             << HIJAU << "Koin Tertangkap: " << BOLD << skor_koin << RESET << " / 3  |  "
+             << pad << "\033[K   Mangkuk: " << CYBER_CYAN << "[   |   ]" << RESET << "\n"
+             << "\033[K" << pad_status << HIJAU << "Koin Tertangkap: " << BOLD << skor_koin << RESET << " / 3  |  "
              << (nyawa == 1 ? MERAH : KUNING) << "Sisa Kesempatan: " << BOLD << nyawa << RESET << flush;
 
         bool tombol_ditekan = false;
@@ -131,7 +124,7 @@ bool mainkan_game_maneki_catch() {
         if (tombol_ditekan) {
             if (posisi_koin >= 14 && posisi_koin <= 16) {
                 skor_koin++;
-                kecepatan -= 8; 
+                kecepatan -= 12;
                 posisi_koin = 0; 
             } else {
                 nyawa--;
@@ -142,15 +135,15 @@ bool mainkan_game_maneki_catch() {
         posisi_koin++;
         if (posisi_koin >= batas_lebar) {
             posisi_koin = 0;
-            nyawa--; // Koin jatuh tak tertangkap mengurangi nyawa (Fix infinite loop logika sesungguhnya)
+            nyawa--;
         }
 
         this_thread::sleep_for(chrono::milliseconds(kecepatan));
     }
-    cout << "\033[?25h"; // Munculkan kursor lagi
+
+    cout << "\033[?25h"; 
 
     cls();
-    cetak_banner();
     cout << BOLD << NEON_PURPLE;
     cetakTengah("=====================================================");
     cout << NEON_PINK;
@@ -163,18 +156,12 @@ bool mainkan_game_maneki_catch() {
         cetak_opsi_tengah(HIJAU "[✓] BERHASIL! Mangkuk Anda penuh terisi koin keberuntungan." RESET);
         cetak_opsi_tengah("Maneki Neko mengaktifkan Buff Pity SSR (+5%) untuk 3 Draw!");
         cout << "\n";
-        cout << NEON_PURPLE;
-        cetakTengah("=====================================================");
-        cout << RESET;
         pause();
         return true;
     } else {
         cetak_opsi_tengah(MERAH "[!] GAGAL! Koin berjatuhan berserakan di lantai kafe." RESET);
-        cetak_opsi_tengah("Gagal menyelaraskan ritme (Kau orang sial btw).");
+        cetak_opsi_tengah("Gagal menyelaraskan ritme.");
         cout << "\n";
-        cout << NEON_PURPLE;
-        cetakTengah("=====================================================");
-        cout << RESET;
         pause();
         return false;
     }
