@@ -1,6 +1,9 @@
+<p align="center">
+  <img src="d6142b75276ece151256358bab352751.gif" alt="Maneki Neko Smart Cafe Arcade" width="250">
+</p>
+
 <div align="center">
 
-<img src="d6142b75276ece151256358bab352751.gif" alt="Maneki Neko Smart Cafe Arcade" width="250"> 
 # ☕ SMART CAFE LOYALTY SYSTEM
 **Advanced CLI Management & Gamification Platform**
 
