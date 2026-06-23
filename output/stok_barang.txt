@@ -1,2 +1,0 @@
-K1,Kopi Ireng,10000,20,Rezeki Tuhan
-E1,Es teh hangat,15000,15,Rezeki Tuhan
