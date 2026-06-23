@@ -1,6 +1,5 @@
 .vscode/
 output/
-
 *.exe
 *.out
 synthesizer
